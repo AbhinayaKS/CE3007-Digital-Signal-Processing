@@ -3,6 +3,35 @@ import matplotlib.pyplot as plt
 import scipy.io.wavfile as wavfile
 import winsound
 
+# Declare the DTMF constant frequencies
+DTMF_FREQ = {'0': [1336, 941],
+            '1': [1209, 697],
+            '2': [1336, 697],
+            '3': [1477, 697],
+            '4': [1209, 770],
+            '5': [1336, 770],
+            '6': [1477, 770],
+            '7': [1209, 852],
+            '8': [1336, 852],
+            '9': [1477, 852],
+            '*': [1209, 941],
+            '#': [1477, 941]
+             }
+
+
+def fnGenSampledDTMF(seq, Fs, durTone):
+    sTime = 0
+    eTime = 0 + durTone
+    y = []
+
+    for char in seq:
+        n = np.arange(sTime, eTime, 1.0/Fs)
+        y1 = 0.5*np.sin(2 * np.pi * DTMF_FREQ[char][0] * n)
+        y2 = 0.5*np.sin(2 * np.pi * DTMF_FREQ[char][1] * n)
+        y = np.concatenate((y, y1 + y2))
+
+    return [n,y]
+
 
 def fnGenSampledSinusoid(A, Freq, Phi, Fs, sTime, eTime):
     n = np.arange(sTime, eTime, 1.0 / Fs)
@@ -135,7 +164,11 @@ def Lab3_1(A, Freq, Phi, Fs, sTime, eTime, start, end, step, nCycles):
 
 
 def Lab3_2(inputSeq, Fs, durTone):
-    pass
+    _, y = fnGenSampledDTMF(inputSeq, Fs, durTone)
+    y16Bit = fnNormalizeFloatTo16Bit(y)
+    fileName = 'output/DTMFOutput.wav'
+    wavfile.write(fileName, Fs, y16Bit)
+    winsound.PlaySound(fileName, winsound.SND_FILENAME)
 
 
 def Lab3_4(A, w, Phi, N):
@@ -163,7 +196,7 @@ def Lab3_4(A, w, Phi, N):
     # 3-D Plot showing the trajectory
     plt.rcParams['legend.fontsize'] = 10
     fig = plt.figure(3)
-    ax = fig.gca(projection='3d')
+    ax = fig.add_subplot(projection='3d')
     reVal = y[0:N].real
     imgVal = y[0:N].imag
     ax.plot(n, reVal, imgVal, label='complex exponential phasor')
@@ -198,7 +231,7 @@ def Lab3_4(A, w, Phi, N):
     # 3-D Plot showing the trajectory
     plt.rcParams['legend.fontsize'] = 10
     fig = plt.figure(3)
-    ax = fig.gca(projection='3d')
+    ax = fig.add_subplot(projection='3d')
     reVal = y[0:N].real
     imgVal = y[0:N].imag
     ax.plot(n, reVal, imgVal, label='complex exponential phasor')
@@ -222,19 +255,16 @@ def Lab3_5(K, N):
         n = np.arange(0, N, 1)
         Wk = 1 * np.exp(1j * 2 * np.pi * k * n / N)
 
-        # 2-D plot of real and imaginary values in the same figure
+        # Polar plot of the sequence
         plt.figure(1)
-        plt.plot(n, Wk[0:N].real, 'r--o')
-        plt.plot(n, Wk[0:N].imag, 'g--o')
-        plt.xlabel('sample index n')
-        plt.ylabel('y[n]')
-        plt.title('Complex exponential (red = real) (green = imaginary)')
-        plt.grid()
+        for x in Wk:
+            plt.polar([0, np.angle(x)], [0, np.abs(x)], marker='o')
+        plt.title('Polar plot showing phasors at n=0..N')
 
         # 3-D Plot showing the trajectory
         plt.rcParams['legend.fontsize'] = 10
         fig = plt.figure(2)
-        ax = fig.gca(projection='3d')
+        ax = fig.add_subplot(projection='3d')
         reVal = Wk[0:N].real
         imgVal = Wk[0:N].imag
         ax.plot(n, reVal, imgVal, label='complex exponential phasor')
@@ -254,5 +284,6 @@ def Lab3_5(K, N):
 
 if __name__ == '__main__':
     # Lab3_1(A=0.1, Freq=1000, Phi=0, Fs=16000, sTime=0, eTime=1, start=2000, end=32000, step=2000, nCycles=6)
+    Lab3_2(inputSeq="0123#", Fs=16000, durTone=1)
     # Lab3_4(A=0.95, w=2*np.pi/36, Phi=0, N=200)
-    Lab3_5(4, 16)
+    # Lab3_5(K=4, N=16)
