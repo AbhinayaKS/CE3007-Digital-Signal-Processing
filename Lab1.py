@@ -171,6 +171,40 @@ def Lab3_2(inputSeq, Fs, durTone):
     winsound.PlaySound(fileName, winsound.SND_FILENAME)
 
 
+def Lab3_3(Freq1, Freq2, Phi1, Phi2, Fs, sTime, eTime):
+    # Assume values for the two amplitudes
+    A = 0.1
+    B = 0.1
+
+    n, y1 = fnGenSampledSinusoid(A, Freq1, Phi1, Fs, sTime, eTime)
+    n, y2 = fnGenSampledSinusoid(B, Freq2, Phi2, Fs, sTime, eTime)
+    y3 = y1 + y2
+    numSamples = np.arange(0,len(n),1)
+
+    # Subsection a.
+    plt.figure(1)
+    plt.stem(numSamples, y1,'g-')
+    plt.title('Signal y1')
+    plt.grid()
+
+    plt.figure(2)
+    plt.stem(numSamples, y2,'g-')
+    plt.title('Signal y2')
+    plt.grid()
+
+    plt.figure(3)
+    plt.stem(numSamples, y3,'g-')
+    plt.title('Signal y3')
+    plt.grid()
+    plt.show()
+
+    '''
+    b. Period of y1[n] = 0.1s, y2[n] = 0.067s, y3[n] = 0.2s (number of samples in a cycle * 1 / Fs)
+    c. TODO
+    d. TODO
+    '''
+
+
 def Lab3_4(A, w, Phi, N):
     n = np.arange(0, N, 1)
     y = np.multiply(np.power(A, n), np.exp(1j * (w * n + Phi)))
@@ -284,6 +318,7 @@ def Lab3_5(K, N):
 
 if __name__ == '__main__':
     # Lab3_1(A=0.1, Freq=1000, Phi=0, Fs=16000, sTime=0, eTime=1, start=2000, end=32000, step=2000, nCycles=6)
-    Lab3_2(inputSeq="0123#", Fs=16000, durTone=1)
+    # Lab3_2(inputSeq="0123#", Fs=16000, durTone=1)
+    Lab3_3(Freq1=10, Freq2=15, Phi1=0, Phi2=0, Fs=60, sTime=0, eTime=1)
     # Lab3_4(A=0.95, w=2*np.pi/36, Phi=0, N=200)
     # Lab3_5(K=4, N=16)
