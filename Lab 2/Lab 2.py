@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import scipy.io.wavfile as wavfile
 import winsound
 from scipy import signal
+import time
 
 
 def fnGenSampledSinusoid(A, Freq, Phi, Fs, sTime, eTime):
@@ -62,19 +63,23 @@ def Lab2_3():
     plt.show()
 
     # Read the input file
-    fileName = 't1_16bit.wav'
+    fileName = 'Lab 2/testIp_16bit.wav'
     winsound.PlaySound(fileName, winsound.SND_FILENAME)
     [Fs, sampleX_16bit] = wavfile.read(fileName)
     sampleX_float = fnNormalize16BitToFloat(sampleX_16bit)
 
+    start = time.time()
     customConv = convolve(sampleX_float, impulseH)
     npConv = np.convolve(sampleX_float, impulseH)
+    end = time.time()
+    print(f"Runtime of the convolution is {(end - start)/2}")
+    
     assert (customConv == npConv).all()
     print("Results are the same between the custom function and the numpy function.")
 
     # Subsection (b)
     y16Bit = fnNormalizeFloatTo16Bit(npConv)
-    fileName = 'output/filteredSound.wav'
+    fileName = 'Lab 2/output/filteredSound.wav'
     wavfile.write(fileName, Fs, y16Bit)
     winsound.PlaySound(fileName, winsound.SND_FILENAME)
 
@@ -242,8 +247,8 @@ def Lab2_5():
 if __name__ == '__main__':
     H1 = np.array([0.06523, 0.14936, 0.21529, 0.2402, 0.21529, 0.14936, 0.06523], dtype='float')
     H2 = np.array([-0.06523, -0.14936, -0.21529, 0.7598, -0.21529, -0.14936, -0.06523], dtype='float')
-    Lab2_1b()
-    # Lab2_3()
+    # Lab2_1b()
+    Lab2_3()
     # Lab2_4ab(H1, H2)
     # Lab2_4c(H1, H2)
     # Lab2_5()
