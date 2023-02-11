@@ -236,6 +236,7 @@ def Lab2_4c(h1, h2):
 
 def Lab2_5():
     fileName = 'Lab 2/helloworld_noisy_16bit.wav'
+    print('Playing Noisy Input..')
     winsound.PlaySound(fileName, winsound.SND_FILENAME)
     [Fs, sampleX_16bit] = wavfile.read(fileName)
     sampleX_float = fnNormalize16BitToFloat(sampleX_16bit)
@@ -243,6 +244,8 @@ def Lab2_5():
     # Subsection (a)
     plt.figure(1)
     plt.title('Input Signal in time domain')
+    plt.xlabel('n')
+    plt.ylabel('x[n]')
     plt.plot(sampleX_float, 'b-')
 
     plt.figure(2)
@@ -271,6 +274,12 @@ def Lab2_5():
     plt.plot(y[3:])
     plt.show()
 
+    out_16Bit = fnNormalizeFloatTo16Bit(y)
+    fileName = 'Lab 2/output/helloWorld_clean.wav'
+    wavfile.write(fileName, Fs, out_16Bit)
+    print('Playing Cleaned Sound..')
+    winsound.PlaySound(fileName, winsound.SND_FILENAME)
+
 
 if __name__ == '__main__':
     H1 = np.array([0.06523, 0.14936, 0.21529, 0.2402, 0.21529, 0.14936, 0.06523], dtype='float')
@@ -278,5 +287,5 @@ if __name__ == '__main__':
     # Lab2_1b()
     # Lab2_3()
     # Lab2_4ab(H1, H2)
-    Lab2_4c(H1, H2)
-    # Lab2_5()
+    # Lab2_4c(H1, H2)
+    Lab2_5()
