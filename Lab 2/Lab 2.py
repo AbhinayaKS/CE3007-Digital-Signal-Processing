@@ -59,6 +59,9 @@ def Lab2_3():
     impulseH[7900] = 0.3
 
     plt.figure()
+    plt.title('Impulse Response')
+    plt.xlabel('n')
+    plt.ylabel('Impulse Response')
     plt.stem(impulseH, linefmt='ro')
     plt.show()
 
@@ -73,7 +76,7 @@ def Lab2_3():
     npConv = np.convolve(sampleX_float, impulseH)
     end = time.time()
     print(f"Runtime of the convolution is {(end - start)/2}")
-    
+
     assert (customConv == npConv).all()
     print("Results are the same between the custom function and the numpy function.")
 
@@ -94,15 +97,20 @@ def Lab2_4ab(h1, h2):
 
     # Subsection (a)
     plt.figure(1)
+    plt.xlabel('n')
+    plt.ylabel('Impulse Response h1')
+    plt.title('Impulse Response h1')
     plt.stem(h1, linefmt='ro')
     plt.figure(2)
+    plt.xlabel('n')
+    plt.ylabel('Impulse Response h2')
+    plt.title('Impulse Response h2')
     plt.stem(h2, linefmt='gx')
     plt.show()
 
     # Subsection (b)
     # We choose 16 samples as the range is till delta of n - 15
     x = signal.unit_impulse(16) - 2 * signal.unit_impulse(16, 15)
-    print(x)
 
     y1SciPy = signal.lfilter(h1, [1], x)
     y1NumPy = np.convolve(x, h1)[0: len(x)]
@@ -110,14 +118,20 @@ def Lab2_4ab(h1, h2):
 
     plt.figure(1)
     plt.title('Output of system with h1 - SciPy')
+    plt.xlabel('n')
+    plt.ylabel('y[n]')
     plt.stem(y1SciPy, linefmt='ro')
 
     plt.figure(2)
     plt.title('Output of system with h1 - NumPy')
+    plt.xlabel('n')
+    plt.ylabel('y[n]')
     plt.stem(y1NumPy, linefmt='ro')
 
     plt.figure(3)
     plt.title('Output of system with h1 - Custom')
+    plt.xlabel('n')
+    plt.ylabel('y[n]')
     plt.stem(y1Custom, linefmt='ro')
 
     plt.show()
@@ -128,14 +142,20 @@ def Lab2_4ab(h1, h2):
 
     plt.figure(1)
     plt.title('Output of system with h2 - SciPy')
+    plt.xlabel('n')
+    plt.ylabel('y[n]')
     plt.stem(y2SciPy, linefmt='ro')
 
     plt.figure(2)
     plt.title('Output of system with h2 - NumPy')
+    plt.xlabel('n')
+    plt.ylabel('y[n]')
     plt.stem(y2NumPy, linefmt='ro')
 
     plt.figure(3)
     plt.title('Output of system with h2 - Custom')
+    plt.xlabel('n')
+    plt.ylabel('y[n]')
     plt.stem(y2Custom, linefmt='ro')
 
     plt.show()
@@ -156,7 +176,7 @@ def Lab2_4c(h1, h2):
     plt.pcolormesh(t, f, 10 * np.log10(Sxx_clean), shading='auto')
     plt.ylabel('Frequency [Hz]')
     plt.xlabel('Time [sec]')
-    plt.title('spectrogram of signal')
+    plt.title('Spectrogram of signal')
     plt.show()
 
     # Subsection (b)
@@ -195,19 +215,27 @@ def Lab2_4c(h1, h2):
     plt.show()
 
     # Save sound
+    x_16Bit = fnNormalizeFloatTo16Bit(x)
+    fileName = 'Lab 2/output/SinusoidInput.wav'
+    wavfile.write(fileName, Fs, x_16Bit)
+    print('Playing Input Sound..')
+    winsound.PlaySound(fileName, winsound.SND_FILENAME)
+
     y1_16Bit = fnNormalizeFloatTo16Bit(y1)
-    fileName = 'output/h1_Output.wav'
+    fileName = 'Lab 2/output/h1_Output.wav'
     wavfile.write(fileName, Fs, y1_16Bit)
+    print('Playing Output Sound with H1..')
     winsound.PlaySound(fileName, winsound.SND_FILENAME)
 
     y2_16Bit = fnNormalizeFloatTo16Bit(y2)
-    fileName = 'output/h2_Output.wav'
+    fileName = 'Lab 2/output/h2_Output.wav'
     wavfile.write(fileName, Fs, y2_16Bit)
+    print('Playing Output Sound with H2..')
     winsound.PlaySound(fileName, winsound.SND_FILENAME)
 
 
 def Lab2_5():
-    fileName = 'helloworld_noisy_16bit.wav'
+    fileName = 'Lab 2/helloworld_noisy_16bit.wav'
     winsound.PlaySound(fileName, winsound.SND_FILENAME)
     [Fs, sampleX_16bit] = wavfile.read(fileName)
     sampleX_float = fnNormalize16BitToFloat(sampleX_16bit)
@@ -248,7 +276,7 @@ if __name__ == '__main__':
     H1 = np.array([0.06523, 0.14936, 0.21529, 0.2402, 0.21529, 0.14936, 0.06523], dtype='float')
     H2 = np.array([-0.06523, -0.14936, -0.21529, 0.7598, -0.21529, -0.14936, -0.06523], dtype='float')
     # Lab2_1b()
-    Lab2_3()
+    # Lab2_3()
     # Lab2_4ab(H1, H2)
-    # Lab2_4c(H1, H2)
+    Lab2_4c(H1, H2)
     # Lab2_5()
