@@ -235,7 +235,7 @@ def Lab2_4c(h1, h2):
 
 
 def Lab2_5():
-    fileName = 'Lab 2/helloworld_noisy_16bit.wav'
+    fileName = 'helloworld_noisy_16bit.wav'
     print('Playing Noisy Input..')
     winsound.PlaySound(fileName, winsound.SND_FILENAME)
     [Fs, sampleX_16bit] = wavfile.read(fileName)
@@ -275,7 +275,7 @@ def Lab2_5():
     plt.show()
 
     out_16Bit = fnNormalizeFloatTo16Bit(y)
-    fileName = 'Lab 2/output/helloWorld_clean.wav'
+    fileName = 'output/helloWorld_clean.wav'
     wavfile.write(fileName, Fs, out_16Bit)
     print('Playing Cleaned Sound..')
     winsound.PlaySound(fileName, winsound.SND_FILENAME)
