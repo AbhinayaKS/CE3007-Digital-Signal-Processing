@@ -148,9 +148,9 @@ def Q2D(x, N):
 
 def Q3(N):
     W = np.zeros(shape=(N, N),dtype=complex)
-    for n in np.arange(0,N):
-        for k in np.arange(0, N):
-            W[n, k] = np.exp(-1j*(2*np.pi/N)*k*n)
+    for k in np.arange(0,N):
+        for n in np.arange(0, N):
+            W[k, n] = np.exp(-1j*(2*np.pi/N)*k*n)
     W_angle = np.angle(W)
 
     plt.figure()
@@ -197,6 +197,6 @@ if __name__ == '__main__':
     # valFFT, valDTFS, valDFT = Q2B(x, N)
     # Q2C(valDTFS=valDTFS, valDFT=valDFT, valFFT=valFFT, ipX=x)
     # Q2D(x, N)
-    # Q3(N=16)
+    Q3(N=16)
     # Q4B(ipX, truncateLengths)
-    Q5(convExampleX, convExampleH)
+    # Q5(convExampleX, convExampleH)
